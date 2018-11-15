@@ -16,4 +16,8 @@ class ApplicationController < ActionController::Base
     redirect_to cats_url if current_user
   end
 
+  def redirect_if_signed_out
+    redirect_to new_session_url unless current_user
+  end
+
 end

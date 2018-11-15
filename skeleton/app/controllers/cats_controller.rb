@@ -1,4 +1,7 @@
 class CatsController < ApplicationController
+  before_action :redirect_if_signed_out, only: [:edit, :update, :new, :create]
+  before_action :redirect_if_not_cat_owner, only: [:edit, :update]
+
   def index
     @cats = Cat.all
     render :index
@@ -16,6 +19,7 @@ class CatsController < ApplicationController
 
   def create
     @cat = Cat.new(cat_params)
+    @cat.user_id = current_user.id
     if @cat.save
       redirect_to cat_url(@cat)
     else
@@ -40,6 +44,11 @@ class CatsController < ApplicationController
   end
 
   private
+
+  def redirect_if_not_cat_owner
+    cat = Cat.find_by(id: params[:id])
+    redirect_to cat_url(cat) unless current_user.cats.include?(cat)
+  end
 
   def cat_params
     params.require(:cat).permit(:age, :birth_date, :color, :description, :name, :sex)
