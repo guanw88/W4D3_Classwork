@@ -23,8 +23,9 @@ class User < ApplicationRecord
     class_name: :Cat
 
   has_many :requests,
-    through: :cats,
-    source: :rental_requests
+    primary_key: :id,
+    foreign_key: :user_id,
+    class_name: :CatRentalRequest
 
   def self.find_by_credentials(user_name, password)
     user = self.find_by(user_name: user_name)
