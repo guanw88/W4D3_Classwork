@@ -22,6 +22,10 @@ class CatRentalRequest < ApplicationRecord
 
   belongs_to :cat
 
+  has_one :cat_owner,
+    through: :cat,
+    source: :owner
+
   after_initialize :assign_pending_status
 
   def approve!

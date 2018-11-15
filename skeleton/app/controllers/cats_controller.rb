@@ -2,6 +2,8 @@ class CatsController < ApplicationController
   before_action :redirect_if_signed_out, only: [:edit, :update, :new, :create]
   before_action :redirect_if_not_cat_owner, only: [:edit, :update]
 
+  helper_method :current_cat_owner?
+
   def index
     @cats = Cat.all
     render :index
@@ -41,6 +43,11 @@ class CatsController < ApplicationController
       flash.now[:errors] = @cat.errors.full_messages
       render :edit
     end
+  end
+
+  def current_cat_owner?(request)
+    current_user == request.cat_owner
+    # fail
   end
 
   private

@@ -22,6 +22,10 @@ class User < ApplicationRecord
     foreign_key: :user_id,
     class_name: :Cat
 
+  has_many :requests,
+    through: :cats,
+    source: :rental_requests
+
   def self.find_by_credentials(user_name, password)
     user = self.find_by(user_name: user_name)
     if user && user.is_password?(password)
